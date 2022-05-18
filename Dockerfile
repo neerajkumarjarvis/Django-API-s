@@ -6,10 +6,10 @@ RUN mkdir /panna
 WORKDIR /panna
 COPY . /panna
 # create directory.
-#RUN mkdir -p /vol/web/
-#RUN adduser --disabled-password --gecos '' user
-#RUN chown -R user:user /vol/
-#RUN chmod -R 755 /vol/web
-#USER user
+RUN mkdir -p /vol/web/
+RUN adduser --disabled-password --gecos '' user
+RUN chown -R user:user /vol/
+RUN chmod -R 755 /vol/web
+USER user
 COPY ./entrypoint.sh /
 ENTRYPOINT ["sh", "/entrypoint.sh"]
