@@ -61,7 +61,7 @@ options:
   substitutionOption: ALLOW_LOOSE
 substitutions:
   _K8S_APP_NAME: panna-app
-  _GKE_CLUSTER: panna
+  _GKE_CLUSTER: saral-cluster
   _OUTPUT_BUCKET_PATH: bjp-saral_cloudbuild/deploy
   _DOCKERFILE_DIR: ''
   _K8S_ANNOTATIONS: gcb-trigger-id=a77522ca-3e8d-49a2-aa07-c8da35b0face
