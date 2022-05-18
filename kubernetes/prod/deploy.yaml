@@ -20,7 +20,7 @@ spec:
   revisionHistoryLimit: 10
   selector:
     matchLabels:
-      app: panna-app-app
+      app: panna-app
   strategy:
     rollingUpdate:
       maxSurge: 1
