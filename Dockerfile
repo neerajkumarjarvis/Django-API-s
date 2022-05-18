@@ -4,10 +4,10 @@ ENV PYTHONUNBUFFERED 1
 RUN mkdir /panna
 WORKDIR /panna
 RUN pip install --upgrade pip
-COPY requirements.txt /code/
+COPY requirements.txt /panna/
 
 RUN pip install -r requirements.txt
-COPY . /code/
+COPY . /panna/
 
 EXPOSE 8000
 
