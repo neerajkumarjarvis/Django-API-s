@@ -13,3 +13,4 @@ RUN chmod -R 755 /vol/web
 USER user
 COPY ./entrypoint.sh /
 ENTRYPOINT ["sh", "/entrypoint.sh"]
+CMD ["gunicorn"  , "-b", "0.0.0.0:8000", "panna:panna"]
