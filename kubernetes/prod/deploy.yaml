@@ -33,7 +33,7 @@ spec:
         release: r11082019
     spec:
       containers:
-          image: gcr.io/bjp-saral/github.com/jarvisconsulting/panna
+        - image: gcr.io/bjp-saral/github.com/jarvisconsulting/panna
           imagePullPolicy: IfNotPresent
           name: panna-deployment
           resources:
