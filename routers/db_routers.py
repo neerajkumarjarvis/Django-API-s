@@ -49,7 +49,7 @@ class GoaRouter:
         """
         Reads go to a randomly-chosen replica.
         """
-        return random.choice(['delhi_db','assam_db','gujarat_db','haryana_db','himachal_pradesh_db','madhya_pradesh_db','maharashtra_db','punjab_db','uttar_pradesh_db','uttarakhand_db','west_bengal_db'])
+        return random.choice(['delhi_db','assam_db','gujarat_db','haryana_db','himachal_pradesh_db','madhya_pradesh_db','maharashtra_db','punjab_db','uttar_pradesh_db','uttarakhand_db','west_bengal_db','bjp_db'])
 
     def db_for_write(self, model, **hints):
         """
@@ -62,7 +62,7 @@ class GoaRouter:
         Relations between objects are allowed if both objects are
         in the primary/replica pool.
         """
-        db_set = {'goa_db', 'delhi_db', 'assam_db','gujarat_db','haryana_db','himachal_pradesh_db','madhya_pradesh_db','maharashtra_db','punjab_db','uttar_pradesh_db','uttarakhand_db','west_bengal_db'}
+        db_set = {'goa_db', 'delhi_db', 'assam_db','gujarat_db','haryana_db','himachal_pradesh_db','madhya_pradesh_db','maharashtra_db','punjab_db','uttar_pradesh_db','uttarakhand_db','west_bengal_db','bjp_db'}
         if obj1._state.db in db_set and obj2._state.db in db_set:
             return True
         return None

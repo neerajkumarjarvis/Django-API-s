@@ -27,3 +27,36 @@ class Voter(models.Model):
 
     def __str__(self):
         return self.name+" "+str(self.ac_no) +" " +str(self.part_no)  + " " +str(self.s_no)
+
+
+
+class SaralBooth(models.Model):
+    id = models.BigIntegerField(primary_key=True)
+    state = models.TextField(blank=True, null=True)
+    ac = models.BigIntegerField(blank=True, null=True)
+    ac_name = models.TextField(blank=True, null=True)
+    booth_number = models.BigIntegerField(blank=True, null=True)
+    booth_name = models.TextField(blank=True, null=True)
+    saral_state_id = models.BigIntegerField(blank=True, null=True)
+    saral_ac_id = models.BigIntegerField(blank=True, null=True)
+    current_voters = models.BigIntegerField(blank=True, null=True)
+    pm_targeted_votes = models.FloatField(blank=True, null=True)
+    cm_targeted_votes = models.FloatField(blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'saral_booth'
+
+class BjpVotes(models.Model):
+    id = models.IntegerField(primary_key=True)
+    booth = models.ForeignKey('SaralBooth', models.DO_NOTHING, blank=True, null=True,related_name='bjpvote')
+    election_year = models.BigIntegerField(blank=True, null=True)
+    election_type = models.TextField(blank=True, null=True)
+    vote_ssecured_by_bjp = models.TextField(blank=True, null=True)
+    bjp_position = models.BigIntegerField(blank=True, null=True)
+    correction_in_vote_secured_by_bjp = models.FloatField(blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'bjp_votes'
+
