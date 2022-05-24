@@ -137,8 +137,8 @@ class GetVotes(views.APIView):
                 print(result)
                 return Response({'message': 'booth data', 'data': result}, status=200)
             except Exception as e:
-                print(e)
-                return Response({'message': f'Exception: ', 'data': dict}, status=200)
+                dict=[{}]
+                return Response({'message': 'Exception: ', 'data': dict}, status=200)
 
 
 
