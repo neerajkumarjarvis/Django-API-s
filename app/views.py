@@ -107,10 +107,40 @@ class GetVotes(views.APIView):
         booth_id = request.query_params.get('booth_id')
 
         if booth_id:
-            data = SaralBooth.objects.using('bjp_db').get(id=booth_id)
-            data = data.bjpvote.using('bjp_db').all()
-            data = data.order_by('election_year')
-            data = data.values()
+            try:
+                data = SaralBooth.objects.using('bjp_db').get(id=booth_id)
+
+                data = data.bjpvote.using('bjp_db').all()
+                data = data.order_by('-election_year')
+                boot_wise_votes = data.values()
+                # print(data)
+                voters=SaralBooth.objects.using('bjp_db').filter(id=booth_id)
+                voters=voters.values()
+                voters=voters[0]['current_voters']
+                total_voter = {
+                    "text": "Total voters",
+                    "votes": voters
+                }
+                result = []
+                result.append(total_voter)
+                for booth in boot_wise_votes:
+                    year = booth['election_year']
+                    election_type = booth['election_type']
+                    temp_obj = {
+                        "id":  booth['id'],
+                        "text": ('Total Number of votes obtained by BJP in {} {}'.format(year, election_type)),
+                        "votes": booth["vote_ssecured_by_bjp"],
+                        "corrected_votes": booth["correction_in_vote_secured_by_bjp"]
+                    }
+                    result.append(temp_obj)
+
+                print(result)
+                return Response({'message': 'booth data', 'data': result}, status=200)
+            except Exception as e:
+                print(e)
+                return Response({'message': f'Exception: ', 'data': dict}, status=200)
+
+
 
         elif state and ac:
 
