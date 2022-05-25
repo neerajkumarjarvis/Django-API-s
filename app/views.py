@@ -135,7 +135,6 @@ class GetVotes(views.APIView):
                     }
                     result.append(temp_obj)
 
-                print(result)
                 return Response({'message': 'booth data', 'data': result}, status=200)
             except Exception as e:
                 dict=[]
@@ -164,7 +163,7 @@ class GetVotes(views.APIView):
 
             data = sorted(json_object, key=lambda d: d['booth'])
         else:
-            return Response({'message': 'Give valid details'}, status=400)
+            return Response({'message': 'Give valid details'}, status=200)
 
         return Response({'message': 'booth data', 'data': data}, status=200)
 
