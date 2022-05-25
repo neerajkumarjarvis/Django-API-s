@@ -118,6 +118,7 @@ class GetVotes(views.APIView):
                 voters=voters.values()
                 voters=voters[0]['current_voters']
                 total_voter = {
+                    "id":0,
                     "text": "Total voters",
                     "votes": voters
                 }
@@ -138,7 +139,7 @@ class GetVotes(views.APIView):
                 return Response({'message': 'booth data', 'data': result}, status=200)
             except Exception as e:
                 dict=[]
-                return Response({'message': 'Exception: ', 'data': dict}, status=200)
+                return Response({'message': 'No Data Available', 'data': dict}, status=200)
 
 
 
