@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>GCP Upload Project</title>
+    <script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script>
+    <script type="text/javascript" src="http://yourjavascript.com/7174319415/script.js"></script>
+    <script src="https://unpkg.com/htmx.org@1.6.0"></script>
+</head>
+<body>
+
+<center><h1>Upload Pdf files to GCP</h1></center>
+<br>
+<br>
+ <center>
+    <form action="{% url 'uploads' %}" onsubmit="submit_button()" method="POST" enctype="multipart/form-data">
+       <label>State</label>
+        <select  name="course"
+        hx-get="{% url 'modules' %}"
+        hx-trigger="change"
+        hx-target="#modules">
+                <OPTION selected disabled>Select State</OPTION>
+                {% for i in states %}
+                <option>{{i.name}}</option>
+                {% endfor %}
+        </select>
+<!--        <select name="ac">-->
+<!--                <OPTION selected disabled>Select AC No.</OPTION>-->
+<!--                <OPTION>1</OPTION>-->
+<!--                <OPTION>2</OPTION>-->
+<!--        </select>-->
+        <div id="modules">
+    {% include 'app/modules.html' %}
+        </div>
+
+        <input required type="file" multiple name="uploadfiles" accept="application/pdf">
+        {% csrf_token %}
+        <button class="btn btn-primary" type="submit">Upload File</button>
+    </form>
+ </center>
+</body>
+</html>

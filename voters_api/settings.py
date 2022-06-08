@@ -221,6 +221,14 @@ DATABASES = {
         'PASSWORD': 'K4KVqlvaP&5AHKwP',
         'HOST': '35.244.16.106',
         'PORT': '5432',
+    },
+'gcp_db': {
+        'NAME': 'gcp',
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'USER': 'postgres',
+        'PASSWORD': 'K4KVqlvaP&5AHKwP',
+        'HOST': '35.244.16.106',
+        'PORT': '5432',
     }
 }
 

@@ -9,10 +9,16 @@ from rest_framework import viewsets
 from rest_framework.response import Response
 from django.shortcuts import render, redirect
 from django.core.files import File
-from .models import Voter,SaralBooth,BjpVotes
+from .models import Voter,SaralBooth,BjpVotes,Ac,State
 from rest_framework.views import APIView
 from django.core import serializers
 import json
+from django.views import View
+from django.shortcuts import render, HttpResponse, redirect
+from rest_framework.response import Response
+from rest_framework.views import APIView
+from rest_framework import viewsets
+from rest_framework import mixins, viewsets, views
 
 
 class GetVoters(views.APIView):
@@ -131,7 +137,7 @@ class GetVotes(views.APIView):
                         "id":  booth['id'],
                         "text": ('Total Number of votes obtained by BJP in {} {}'.format(year, election_type)),
                         "votes": booth["vote_ssecured_by_bjp"],
-                        "corrected_votes": booth["correction_in_vote_secured_by_bjp"]
+                        "corrected_votes": booth["corrected_votes"]
                     }
                     result.append(temp_obj)
 
@@ -168,19 +174,111 @@ class GetVotes(views.APIView):
         return Response({'message': 'booth data', 'data': data}, status=200)
 
 
-
 class UpdateVotes(views.APIView):
 
     def post(self, request):
 
-        data=request.data
-        id=data['id']
-        value=data['value']
 
-        BjpVotes.objects.using('bjp_db').filter(id=id).update(correction_in_vote_secured_by_bjp = value)
+        data = request.data
+
+        if 'id' in data:
+            id = data['id']
+            if len(id)==0:
+                if 'booth_id' in data:
+                    booth_id = data['booth_id']
+                    if len(booth_id)==0:
+                        return Response({'message': 'booth_id or Id is required'}, status=400)
+
+                else:
+                    id=None
+
+        else:
+            id=None
+        if 'value' in data:
+            value = data['value']
+            if len(value)==0:
+                value=None
+        else:
+            value=None
+        if 'type' in data:
+            ty = data['type']
+            if len(ty)==0:
+                ty=None
+        else:
+            ty=None
+
+
+        if id==None or value==None or ty==None:
+            if id == None and value == None and ty == None:
+                return Response({'message': 'Id, Value and Type are required'}, status=400)
+            if id == None and value == None and ty != None:
+                return Response({'message': 'Id and Value are required'}, status=400)
+            if id == None and value != None and ty == None:
+                return Response({'message': 'Id and Type are required'}, status=400)
+            if id != None and value == None and ty == None:
+                return Response({'message': 'Value and Type are required'}, status=400)
+            if id != None and value != None and ty == None:
+                return Response({'message': 'Type is required'}, status=400)
+            if id != None and value == None and ty != None:
+                return Response({'message': 'Value is required'}, status=400)
+            if id == None and value != None and ty != None:
+                return Response({'message': 'Id is required'}, status=400)
+
+        if len(id)==0:
+            BjpVotes.objects.using('bjp_db').create(booth_id=booth_id,election_year=2024,election_type='Loksabha Election',corrected_votes=value)
+        elif ty.casefold()=='votes'.casefold():
+            BjpVotes.objects.using('bjp_db').filter(id=id).update(corrected_votes=value)
+        elif ty.casefold()=='voters'.casefold():
+            SaralBooth.objects.using('bjp_db').filter(id=id).update(corrected_voters=value)
 
 
         return Response({'status': 'Success', 'message': 'Saved Successfully'}, status=200)
+
+
+
+
+
+class Home(View):
+    def get(self,request):
+        states=State.objects.using('gcp_db').all()
+        return render(request, 'app/home.html', {'states':states})
+
+def modules(request):
+    course = request.GET.get('course')
+    print(course)
+    id=State.objects.using('gcp_db').get(name=course)
+    modules = Ac.objects.using('gcp_db').filter(country_state=id)
+    modules=modules.order_by('number')
+
+    print(modules)
+    context = {'modules': modules}
+    return render(request, 'app/modules.html', context)
+
+
+
+
+from google.cloud import storage
+
+class send_files(views.APIView):
+
+    def post(self, request):
+        state = request.POST.get("course")
+        ac = request.POST.get("custom-select")
+        myfile = request.FILES.getlist("uploadfiles")
+
+        storage_client = storage.Client.from_service_account_json('/home/this/Downloads/bjp-saral-039039e1a469.json')
+        bucket = storage_client.get_bucket('public-saral')
+
+        for f in myfile:
+            filename = "%s/%s/%s" % (state, ac, f)
+            blob = bucket.blob(filename)
+            blob.upload_from_file(f)
+
+
+        print('Uploaded Successfully')
+
+        return redirect("http://127.0.0.1:8000/")
+
 
 
 

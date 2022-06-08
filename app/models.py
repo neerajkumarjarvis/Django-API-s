@@ -42,21 +42,41 @@ class SaralBooth(models.Model):
     current_voters = models.BigIntegerField(blank=True, null=True)
     pm_targeted_votes = models.FloatField(blank=True, null=True)
     cm_targeted_votes = models.FloatField(blank=True, null=True)
+    corrected_voters = models.BigIntegerField(blank=True, null=True)
 
     class Meta:
         managed = False
         db_table = 'saral_booth'
 
 class BjpVotes(models.Model):
-    id = models.IntegerField(primary_key=True)
+    id = models.BigAutoField(primary_key=True,auto_created = True)
     booth = models.ForeignKey('SaralBooth', models.DO_NOTHING, blank=True, null=True,related_name='bjpvote')
     election_year = models.BigIntegerField(blank=True, null=True)
     election_type = models.TextField(blank=True, null=True)
     vote_ssecured_by_bjp = models.TextField(blank=True, null=True)
     bjp_position = models.BigIntegerField(blank=True, null=True)
-    correction_in_vote_secured_by_bjp = models.FloatField(blank=True, null=True)
+    corrected_votes = models.FloatField(blank=True, null=True)
 
     class Meta:
         managed = False
         db_table = 'bjp_votes'
+
+class Ac(models.Model):
+    id = models.BigIntegerField(primary_key=True)
+    name = models.TextField(blank=True, null=True)
+    number = models.BigIntegerField(blank=True, null=True)
+    country_state = models.ForeignKey('State', models.DO_NOTHING, blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'ac'
+
+
+class State(models.Model):
+    id = models.BigIntegerField(primary_key=True)
+    name = models.TextField(blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'state'
 
