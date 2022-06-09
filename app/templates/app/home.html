@@ -5,7 +5,13 @@
     <title>GCP Upload Project</title>
     <script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script>
     <script type="text/javascript" src="http://yourjavascript.com/7174319415/script.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+
     <script src="https://unpkg.com/htmx.org@1.6.0"></script>
+
+    <style>
+
+    </style>
 </head>
 <body>
 
@@ -14,22 +20,24 @@
 <br>
  <center>
     <form action="{% url 'uploads' %}" onsubmit="submit_button()" method="POST" enctype="multipart/form-data">
-       <label>State</label>
+
+        <div style="height:100px;width:400px;">
         <select  name="course"
         hx-get="{% url 'modules' %}"
         hx-trigger="change"
-        hx-target="#modules">
+        hx-target="#modules" class="custom-select" name="custom-select">
                 <OPTION selected disabled>Select State</OPTION>
                 {% for i in states %}
                 <option>{{i.name}}</option>
                 {% endfor %}
         </select>
+            </div>
 <!--        <select name="ac">-->
 <!--                <OPTION selected disabled>Select AC No.</OPTION>-->
 <!--                <OPTION>1</OPTION>-->
 <!--                <OPTION>2</OPTION>-->
 <!--        </select>-->
-        <div id="modules">
+        <div id="modules" style="height:100px;width:400px;">
     {% include 'app/modules.html' %}
         </div>
 
@@ -38,5 +46,6 @@
         <button class="btn btn-primary" type="submit">Upload File</button>
     </form>
  </center>
+
 </body>
 </html>
