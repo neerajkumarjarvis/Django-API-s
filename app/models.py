@@ -65,7 +65,7 @@ class Ac(models.Model):
     id = models.BigIntegerField(primary_key=True)
     name = models.TextField(blank=True, null=True)
     number = models.BigIntegerField(blank=True, null=True)
-    country_state = models.ForeignKey('State', models.DO_NOTHING, blank=True, null=True)
+    country_state= models.ForeignKey('State', models.DO_NOTHING, blank=True, null=True)
 
     class Meta:
         managed = False

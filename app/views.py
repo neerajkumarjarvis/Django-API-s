@@ -266,7 +266,7 @@ class send_files(views.APIView):
         ac = request.POST.get("custom-select")
         myfile = request.FILES.getlist("uploadfiles")
 
-        storage_client = storage.Client.from_service_account_json('/home/this/Downloads/bjp-saral-039039e1a469.json')
+        storage_client = storage.Client.from_service_account_json('bjp-saral-039039e1a469.json')
         bucket = storage_client.get_bucket('public-saral')
 
         for f in myfile:
