@@ -31,7 +31,7 @@ class Voter(models.Model):
 
 
 class SaralBooth(models.Model):
-    id = models.BigIntegerField(primary_key=True)
+    id = models.BigAutoField(primary_key=True, auto_created=True)
     state = models.TextField(blank=True, null=True)
     ac = models.BigIntegerField(blank=True, null=True)
     ac_name = models.TextField(blank=True, null=True)
@@ -43,10 +43,31 @@ class SaralBooth(models.Model):
     pm_targeted_votes = models.FloatField(blank=True, null=True)
     cm_targeted_votes = models.FloatField(blank=True, null=True)
     corrected_voters = models.BigIntegerField(blank=True, null=True)
+    voter_list_url = models.TextField(blank=True, null=True)
 
     class Meta:
         managed = False
         db_table = 'saral_booth'
+
+
+# class SaralBooth(models.Model):
+#     id = models.BigIntegerField(primary_key=True)
+#     state = models.TextField(blank=True, null=True)
+#     ac = models.BigIntegerField(blank=True, null=True)
+#     ac_name = models.TextField(blank=True, null=True)
+#     booth_number = models.BigIntegerField(blank=True, null=True)
+#     booth_name = models.TextField(blank=True, null=True)
+#     saral_state_id = models.BigIntegerField(blank=True, null=True)
+#     saral_ac_id = models.BigIntegerField(blank=True, null=True)
+#     current_voters = models.BigIntegerField(blank=True, null=True)
+#     pm_targeted_votes = models.FloatField(blank=True, null=True)
+#     cm_targeted_votes = models.FloatField(blank=True, null=True)
+#     corrected_voters = models.BigIntegerField(blank=True, null=True)
+#     voter_list_url = models.TextField(blank=True, null=True)
+#
+#     class Meta:
+#         managed = False
+#         db_table = 'saral_booth'
 
 class BjpVotes(models.Model):
     id = models.BigAutoField(primary_key=True,auto_created = True)

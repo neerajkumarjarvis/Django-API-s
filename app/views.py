@@ -19,6 +19,8 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import viewsets
 from rest_framework import mixins, viewsets, views
+from django.contrib import messages
+
 
 
 class GetVoters(views.APIView):
@@ -264,20 +266,61 @@ class send_files(views.APIView):
     def post(self, request):
         state = request.POST.get("course")
         ac = request.POST.get("custom-select")
-        myfile = request.FILES.getlist("uploadfiles")
+        print(state)
+        print(ac)
+        ac,ac_name=ac.split(' ',1)
 
+        print(type(state))
+        print(type(state.replace(' ','-')))
+
+
+        myfile = request.FILES.getlist("uploadfiles")
+        bucket_name='public-saral'
         storage_client = storage.Client.from_service_account_json('bjp-saral-039039e1a469.json')
         bucket = storage_client.get_bucket('public-saral')
 
         for f in myfile:
-            filename = "%s/%s/%s" % (state, ac, f)
+            s = state.replace(' ', '_')
+            filename = "%s/%s/%s" % (s, ac, f)
             blob = bucket.blob(filename)
+            print(blob)
+            # print(type(blob))
+            # url = blob.generate_signed_url(
+            #     expiration=datetime.timedelta(hours=  999999),
+            # )
+            # print(url)
             blob.upload_from_file(f)
 
 
-        print('Uploaded Successfully')
+            file = f.name
 
-        return redirect("http://127.0.0.1:8000/")
+            # gcs_url = 'https://%(bucket)s.storage.googleapis.com/%(file)s' % {'bucket': bucket, 'file': file}
+            gcs_url = 'https://storage.googleapis.com/{}/{}/{}/{}'.format(bucket_name,s,ac,file)
+            print(gcs_url)
+            # print(type(gcs_url))
+
+
+            booth_number=file[:len(file)-4]
+            # print(booth_number)
+            data = SaralBooth.objects.using('bjp_db').filter(state=state, ac=ac, booth_number=booth_number)
+            if len(data)>=1:
+                booth_id=data[0].id
+                print(booth_id)
+                SaralBooth.objects.using('bjp_db').filter(id=booth_id).update(voter_list_url=gcs_url)
+            else:
+                SaralBooth.objects.using('bjp_db').create(state=state,ac=ac,booth_number=booth_number,ac_name=ac_name,voter_list_url=gcs_url)
+
+        print('Uploaded Successfully')
+        messages.success(request,'Your data has updated successfully')
+
+        return redirect('/')
+
+
+
+
+
+
+
 
 
 

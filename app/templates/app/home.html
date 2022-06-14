@@ -15,17 +15,27 @@
 </head>
 <body>
 
+{% if messages %}
+
+    {% for message in messages %}
+
+<div class="alert alert-{{message.tags}} m-2" id="msg" role="alert">
+    {{message}}
+</div>
+    {% endfor %}
+{% endif %}
+
 <center><h1>Upload Pdf files to GCP</h1></center>
 <br>
 <br>
  <center>
-    <form action="{% url 'uploads' %}" onsubmit="submit_button()" method="POST" enctype="multipart/form-data">
+    <form action="{% url 'uploads' %}" method="POST" enctype="multipart/form-data" onsubmit="return validateForm()">
 
         <div style="height:100px;width:400px;">
-        <select  name="course"
+        <select name="course"
         hx-get="{% url 'modules' %}"
         hx-trigger="change"
-        hx-target="#modules" class="custom-select" name="custom-select">
+        hx-target="#modules" class="custom-select" name="custom-select" id="course" required>
                 <OPTION selected disabled>Select State</OPTION>
                 {% for i in states %}
                 <option>{{i.name}}</option>
@@ -46,6 +56,33 @@
         <button class="btn btn-primary" type="submit">Upload File</button>
     </form>
  </center>
+
+<script>
+
+    setTimeout(function()
+    {
+    if($('#msg').length>0)
+    {
+    $('#msg').remove();
+    }
+    },2000)
+
+function validateForm() {
+  if (document.getElementById('course').value== "Select State")
+  {
+      alert('Please Select State');
+      return false;
+  }
+  else if (document.getElementById('second-select').value== "Choose your Ac")
+  {
+      alert('Please Select Ac');
+      return false;
+  }
+}
+
+
+
+</script>
 
 </body>
 </html>

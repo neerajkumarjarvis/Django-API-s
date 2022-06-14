@@ -1,7 +1,7 @@
-<select class="custom-select" name="custom-select">
-    <option selected>Choose your Ac</option>
+<select class="custom-select" name="custom-select" id="second-select" required>
+    <option selected disabled>Choose your Ac</option>
 
     {% for module in modules %}
-        <option>{{module.number}}</option>
+        <option>{{module.number}} {{module.name}}</option>
     {% endfor %}
 </select>
